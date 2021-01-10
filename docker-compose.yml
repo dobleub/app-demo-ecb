@@ -1,0 +1,57 @@
+version: '3.3'
+
+services: 
+  app:
+    container_name: react-demo
+    build: 
+      context: ./
+      dockerfile: app.dockerfile
+    volumes: 
+      - ./app:/usr/src/app
+      - node_modules_app:/usr/src/app/node_modules
+      - ./logs/app:/home/node/.npm/_logs
+    networks:
+      - net-app-demo
+    ports:
+      - 3000:3000
+
+  api:
+    container_name: api-react-demo
+    build:
+      context: ./
+      dockerfile: api.dockerfile
+    volumes:
+      - ./api:/usr/src/app
+      - node_modules_api:/usr/src/app/node_modules
+      - ./logs/api:/home/node/.npm/_logs
+    networks:
+      - net-app-demo
+    ports:
+      - 3030:3000
+
+  db:
+    container_name: mongodb-react-demo
+    image: mongo:4.2-bionic
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'admin'
+      MONGO_INITDB_ROOT_PASSWORD: 'vGg%ENFsEz%9WrR+Ft2W'
+      MONGO_INITDB_DATABASE: 'admin'
+      MONGO_NON_ROOT_USERNAME: 'app'
+      MONGO_NON_ROOT_PASSWORD: 'z-dMS@L3de2uhT!FXz_!'
+    volumes:     
+      - mongodb_data_app:/data/db
+    networks:
+      - net-app-demo
+    ports:
+      - 27017:27017
+    command: mongod --logpath=/dev/null # --quiet
+
+networks:
+  net-app-demo:
+
+volumes:
+  mongodb_data_app:
+  node_modules_app:
+  node_modules_api:
+  
