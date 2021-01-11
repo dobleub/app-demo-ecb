@@ -24,6 +24,7 @@ RUN chmod -R 777 ${N_PATH}
 COPY ./api .
 RUN chown -R ${N_USER}:${N_USER} .
 COPY --chown=$N_USER:$N_USER --from=node_cache /src/node_modules ./node_modules
+COPY --chown=$N_USER:$N_USER --from=node_cache /src/yarn.lock ./yarn.lock
 
 # Setting up logs dir
 RUN mkdir -p /home/${N_USER}/.npm/_logs
